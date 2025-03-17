@@ -16,17 +16,17 @@ dotenv.config({ path: "./config/.env" });
 // Initialize Express app
 const app = express();
 
-// CORS Middleware
+// ✅ CORS Configuration
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "DELETE", "PUT","PATCH"],
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    credentials: true, // ✅ Allows cookies to be sent from frontend
   })
 );
 
-// Middleware Setup
+// ✅ Middleware Setup
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,26 +37,26 @@ app.use(
   })
 );
 
-// Database Connection
+// ✅ Database Connection
 dbConnection();
 
-// Cloudinary Configuration
+// ✅ Cloudinary Configuration
 cloudinary.v2.config({
-  cloud_name: process.env.CLOUDINARY_CLIENT_NAME,
-  api_key: process.env.CLOUDINARY_CLIENT_API,
-  api_secret: process.env.CLOUDINARY_CLIENT_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLIENT_NAME || "",
+  api_key: process.env.CLOUDINARY_CLIENT_API || "",
+  api_secret: process.env.CLOUDINARY_CLIENT_SECRET || "",
 });
 
-// Routes
+// ✅ Routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
 
-// Error Handling Middleware
+// ✅ Error Handling Middleware
 app.use(errorMiddleware);
 
-// Start Server
+// ✅ Start Server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server running at port ${PORT}`);
+  console.log(`🚀 Server running at port ${PORT}`);
 });
