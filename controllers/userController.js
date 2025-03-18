@@ -47,17 +47,19 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
-  res
-    .status(201)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
-    .json({
-      success: true,
-      message: "Logged Out Successfully.",
-    });
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0), // Expire the cookie immediately
+    secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Logged Out Successfully.",
+  });
 });
+
 
 
 export const getUser = catchAsyncErrors((req, res, next) => {
