@@ -3,7 +3,6 @@ import { User } from "../models/userSchema.js";
 import ErrorHandler from "../middlewares/error.js";
 import { sendToken } from "../utils/jwtToken.js";
 
-
 export const register = catchAsyncErrors(async (req, res, next) => {
   const { name, email, phone, password, role } = req.body;
   console.log(req.body);
@@ -47,19 +46,17 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
-  res.cookie("token", "", {
-    httpOnly: true,
-    expires: new Date(0), // Expire the cookie immediately
-    secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Logged Out Successfully.",
-  });
+  res
+    .status(201)
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "Logged Out Successfully.",
+    });
 });
-
 
 
 export const getUser = catchAsyncErrors((req, res, next) => {
